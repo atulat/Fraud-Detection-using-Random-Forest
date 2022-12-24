@@ -6,13 +6,18 @@ from sklearn.ensemble import RandomForestClassifier as RF
 
 df = pd.read_csv("/Users/atulat/Documents/Decision Tree/Fraud_check.csv")
 
+# Normalization Function
+def norm_func(i):
+    x = (i-i.min())/(i.max()-i.min())
+    return (x)
+
 # Creating dummy vairables for ['Undergrad','Marital.Status','Urban'] dropping first dummy variable
 df=pd.get_dummies(df,columns=['Undergrad','Marital.Status','Urban'], drop_first=True)
 
 # Creating a new Column based on the Taxable Income above 3000 and below.
 l1 = []
-for i in df['Taxable.Income']:
-    if i > 30000:
+for value in df['Taxable.Income']:
+    if value > 30000:
         l1.append("Risky")
     else:
         l1.append("Good")
@@ -20,16 +25,6 @@ df["TaxInc"] = l1
 
 #  One Hot Encoding
 df = pd.get_dummies(df,columns = ["TaxInc"],drop_first=True)
-
-
-# # Pairplot based on the Risk Factor
-# import seaborn as sns
-# sns.pairplot(data=df, hue = 'TaxInc_Risky')
-
-# Normalization function
-def norm_func(i):
-    x = (i-i.min())/(i.max()-i.min())
-    return (x)
 
 # Normalized data frame
 df_norm = norm_func(df.iloc[:,1:])
